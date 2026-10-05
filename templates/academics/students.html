@@ -1,0 +1,26 @@
+{% extends "base/base.html" %}
+{% block page_title %}Students{% endblock %}
+{% block nav %}
+<a href="{% url 'dashboards:school_admin' %}" class="nav-link">Overview</a>
+<a href="{% url 'academics:students' %}" class="nav-link active">Students</a>
+<a href="{% url 'academics:student_enrol' %}" class="nav-link">Enrol</a>
+{% endblock %}
+{% block content %}
+<p><a class="btn btn-primary btn-sm" href="{% url 'academics:student_enrol' %}">+ Enrol student</a></p>
+<div class="card mt">
+  <table class="table">
+    <thead><tr><th>Name</th><th>Admission</th><th>Class</th><th>Status</th><th></th></tr></thead>
+    <tbody>
+      {% for s in students %}
+      <tr>
+        <td>{{ s.full_name }}</td>
+        <td class="mono">{{ s.admission_no }}</td>
+        <td>{% if s.school_class %}{{ s.school_class.name }}{% else %}—{% endif %}</td>
+        <td>{{ s.status }}</td>
+        <td><a href="{% url 'results:report_card' s.id %}">Report</a></td>
+      </tr>
+      {% empty %}<tr><td colspan="5">No students.</td></tr>{% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

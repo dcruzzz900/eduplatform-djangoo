@@ -1,0 +1,38 @@
+{% extends "base/base.html" %}
+{% block page_title %}Create School{% endblock %}
+{% block nav %}
+<a href="{% url 'dashboards:super_admin' %}" class="nav-link">Overview</a>
+<a href="{% url 'schools:list' %}" class="nav-link">Schools</a>
+<a href="{% url 'schools:create' %}" class="nav-link active">Create School</a>
+{% endblock %}
+{% block content %}
+<form method="post" class="card stack">
+  {% csrf_token %}
+  <h2>School details</h2>
+  <label>Name <input class="input" name="name" required></label>
+  <label>Short name <input class="input" name="short_name"></label>
+  <label>Address <input class="input" name="address"></label>
+  <div class="grid two">
+    <label>City <input class="input" name="city"></label>
+    <label>State <input class="input" name="state"></label>
+  </div>
+  <div class="grid two">
+    <label>Phone <input class="input" name="phone"></label>
+    <label>Email <input class="input" name="email" type="email"></label>
+  </div>
+  <fieldset>
+    <legend>Levels</legend>
+    <label class="inline"><input type="checkbox" name="levels" value="NURSERY"> Nursery</label>
+    <label class="inline"><input type="checkbox" name="levels" value="PRIMARY"> Primary</label>
+    <label class="inline"><input type="checkbox" name="levels" value="SECONDARY" checked> Secondary</label>
+  </fieldset>
+  <h2>School Admin account</h2>
+  <div class="grid two">
+    <label>Admin first name <input class="input" name="admin_first_name" value="School"></label>
+    <label>Admin last name <input class="input" name="admin_last_name" value="Admin"></label>
+  </div>
+  <label>Admin email (username) <input class="input" name="admin_email" type="email"></label>
+  <label>Admin password <input class="input" name="admin_password" type="password"></label>
+  <button class="btn btn-primary" type="submit">Create school</button>
+</form>
+{% endblock %}

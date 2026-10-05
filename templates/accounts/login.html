@@ -1,0 +1,26 @@
+{% extends "base/base.html" %}
+{% block title %}Sign in · EduPlatform{% endblock %}
+{% block body_public %}
+<div class="auth-page">
+  <div class="auth-card">
+    <h1>EduPlatform</h1>
+    <p class="muted">School Management System</p>
+    <form method="post" class="stack">
+      {% csrf_token %}
+      {% if form.non_field_errors %}
+      <div class="flash flash-error">{{ form.non_field_errors }}</div>
+      {% endif %}
+      <label>
+        Username / Email
+        <input type="text" name="username" required autofocus class="input">
+      </label>
+      <label>
+        Password
+        <input type="password" name="password" required class="input">
+      </label>
+      <button type="submit" class="btn btn-primary btn-block">Sign in</button>
+    </form>
+    <p class="muted small mt">Demo: superadmin / SuperAdmin@123 · schooladmin / SchoolAdmin@123</p>
+  </div>
+</div>
+{% endblock %}

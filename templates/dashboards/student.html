@@ -1,0 +1,29 @@
+{% extends "base/base.html" %}
+{% block page_title %}Student{% endblock %}
+{% block nav %}
+<a href="{% url 'dashboards:student' %}" class="nav-link active">Dashboard</a>
+<a href="{% url 'results:my' %}" class="nav-link">My results</a>
+<a href="{% url 'attendance:my' %}" class="nav-link">Attendance</a>
+<a href="{% url 'messaging:inbox' %}" class="nav-link">Messages</a>
+{% endblock %}
+{% block content %}
+{% if student %}
+<p>{{ student.full_name }} · {{ student.admission_no }}
+  {% if student.school_class %} · {{ student.school_class.name }}{% endif %}
+</p>
+{% if student %}<a class="btn btn-sm" href="{% url 'results:report_card' student.id %}">Report card</a>{% endif %}
+{% else %}
+<p class="muted">No student profile linked to this login.</p>
+{% endif %}
+<div class="card mt">
+  <h2>Published results</h2>
+  <table class="table">
+    <thead><tr><th>Subject</th><th>Total</th><th>Grade</th></tr></thead>
+    <tbody>
+      {% for r in results %}
+      <tr><td>{{ r.subject.name }}</td><td>{{ r.total_score|default:"—" }}</td><td>{{ r.grade|default:"—" }}</td></tr>
+      {% empty %}<tr><td colspan="3" class="muted">None yet.</td></tr>{% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

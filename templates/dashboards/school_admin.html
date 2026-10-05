@@ -1,0 +1,42 @@
+{% extends "base/base.html" %}
+{% block page_title %}School Admin{% endblock %}
+{% block nav %}
+<a href="{% url 'dashboards:school_admin' %}" class="nav-link active">Overview</a>
+<a href="{% url 'academics:students' %}" class="nav-link">Students</a>
+<a href="{% url 'academics:classes' %}" class="nav-link">Classes</a>
+<a href="{% url 'academics:subjects' %}" class="nav-link">Subjects</a>
+<a href="{% url 'attendance:mark' %}" class="nav-link">Attendance</a>
+<a href="{% url 'results:manage' %}" class="nav-link">Results</a>
+<a href="{% url 'fees:admin' %}" class="nav-link">Fees</a>
+<a href="{% url 'notices:list' %}" class="nav-link">Notices</a>
+<a href="{% url 'messaging:inbox' %}" class="nav-link">Messages</a>
+{% endblock %}
+{% block content %}
+<p class="muted">{{ school.name }} · manage academics, people, fees, and communications.</p>
+<div class="grid stats">
+  <div class="card stat"><span class="stat-value">{{ students_count }}</span><span class="stat-label">Students</span></div>
+  <div class="card stat"><span class="stat-value">{{ classes_count }}</span><span class="stat-label">Classes</span></div>
+</div>
+<div class="grid two mt">
+  <div class="card">
+    <h2>Quick actions</h2>
+    <div class="btn-row">
+      <a class="btn btn-primary" href="{% url 'academics:student_enrol' %}">Enrol student</a>
+      <a class="btn" href="{% url 'attendance:mark' %}">Mark attendance</a>
+      <a class="btn" href="{% url 'results:entry' %}">Enter results</a>
+      <a class="btn" href="{% url 'notices:list' %}">Notices</a>
+    </div>
+  </div>
+  <div class="card">
+    <h2>Notices</h2>
+    {% for n in notices %}
+    <div class="notice-item">
+      <strong>{{ n.title }}</strong>
+      <p class="small">{{ n.body|truncatewords:30 }}</p>
+    </div>
+    {% empty %}
+    <p class="muted">No notices.</p>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

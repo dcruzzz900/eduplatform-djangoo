@@ -1,0 +1,41 @@
+{% extends "base/base.html" %}
+{% block page_title %}Results Entry{% endblock %}
+{% block nav %}
+<a href="{% url 'results:entry' %}" class="nav-link active">Entry</a>
+<a href="{% url 'results:manage' %}" class="nav-link">Manage</a>
+{% endblock %}
+{% block content %}
+<form method="get" class="card row-form">
+  <select class="input" name="class_id" required>
+    <option value="">Class</option>
+    {% for c in classes %}<option value="{{ c.id }}" {% if class_id == c.id|stringformat:"s" %}selected{% endif %}>{{ c.name }}</option>{% endfor %}
+  </select>
+  <select class="input" name="subject_id" required>
+    <option value="">Subject</option>
+    {% for s in subjects %}<option value="{{ s.id }}" {% if subject_id == s.id|stringformat:"s" %}selected{% endif %}>{{ s.name }}</option>{% endfor %}
+  </select>
+  <button class="btn" type="submit">Load</button>
+</form>
+{% if students %}
+<form method="post" class="card mt">
+  {% csrf_token %}
+  <input type="hidden" name="class_id" value="{{ class_id }}">
+  <input type="hidden" name="subject_id" value="{{ subject_id }}">
+  <table class="table">
+    <thead><tr><th>Student</th><th>CA</th><th>Exam</th><th>Status</th></tr></thead>
+    <tbody>
+      {% for s in students %}
+      <tr>
+        <td>{{ s.full_name }}</td>
+        <td><input class="input" style="width:5rem" name="ca_{{ s.id }}" type="number" step="0.5" value="{% if rows|default_if_none:None %}{% endif %}"></td>
+        <td><input class="input" style="width:5rem" name="exam_{{ s.id }}" type="number" step="0.5"></td>
+        <td class="muted small">{% if s.id in rows %}{{ rows|default_if_none:dict }}{% endif %}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <button class="btn" name="action" value="draft" type="submit">Save draft</button>
+  <button class="btn btn-primary" name="action" value="submit" type="submit">Submit for approval</button>
+</form>
+{% endif %}
+{% endblock %}

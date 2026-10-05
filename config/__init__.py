@@ -1,0 +1,1 @@
+# EduPlatform Django config package

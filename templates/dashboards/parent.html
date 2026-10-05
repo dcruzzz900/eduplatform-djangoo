@@ -1,0 +1,27 @@
+{% extends "base/base.html" %}
+{% block page_title %}Parent{% endblock %}
+{% block nav %}
+<a href="{% url 'dashboards:parent' %}" class="nav-link active">Dashboard</a>
+<a href="{% url 'fees:parent' %}" class="nav-link">Fees</a>
+<a href="{% url 'messaging:inbox' %}" class="nav-link">Messages</a>
+{% endblock %}
+{% block content %}
+<h2>My children</h2>
+<div class="grid two">
+  {% for c in children %}
+  <div class="card">
+    <strong>{{ c.full_name }}</strong>
+    <p class="muted small">{{ c.admission_no }} {% if c.school_class %}· {{ c.school_class.name }}{% endif %}</p>
+    <a class="btn btn-sm" href="{% url 'results:report_card' c.id %}">Report card</a>
+  </div>
+  {% empty %}
+  <p class="muted">No children linked. Ask the school admin.</p>
+  {% endfor %}
+</div>
+<div class="card mt">
+  <h2>Notices</h2>
+  {% for n in notices %}
+  <div class="notice-item"><strong>{{ n.title }}</strong><p class="small">{{ n.body|truncatewords:40 }}</p></div>
+  {% empty %}<p class="muted">No notices.</p>{% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends "base/base.html" %}
+{% block page_title %}Fees{% endblock %}
+{% block nav %}
+<a href="{% url 'dashboards:parent' %}" class="nav-link">Dashboard</a>
+<a href="{% url 'fees:parent' %}" class="nav-link active">Fees</a>
+{% endblock %}
+{% block content %}
+<div class="card">
+  <table class="table">
+    <thead><tr><th>Child</th><th>Ref</th><th>Total</th><th>Balance</th><th>Status</th></tr></thead>
+    <tbody>
+      {% for inv in invoices %}
+      <tr>
+        <td>{{ inv.student.full_name }}</td>
+        <td class="mono">{{ inv.reference }}</td>
+        <td>₦{{ inv.total_amount }}</td>
+        <td>₦{{ inv.balance }}</td>
+        <td>{{ inv.status }}</td>
+      </tr>
+      {% empty %}<tr><td colspan="5">No invoices.</td></tr>{% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

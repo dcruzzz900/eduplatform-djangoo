@@ -1,0 +1,36 @@
+{% extends "base/base.html" %}
+{% block page_title %}Super Admin{% endblock %}
+{% block nav %}
+<a href="{% url 'dashboards:super_admin' %}" class="nav-link active">Overview</a>
+<a href="{% url 'schools:list' %}" class="nav-link">Schools</a>
+<a href="{% url 'schools:create' %}" class="nav-link">Create School</a>
+{% endblock %}
+{% block content %}
+<div class="grid stats">
+  <div class="card stat"><span class="stat-value">{{ schools_count }}</span><span class="stat-label">Schools</span></div>
+  <div class="card stat"><span class="stat-value">{{ active_schools }}</span><span class="stat-label">Active</span></div>
+  <div class="card stat"><span class="stat-value">{{ students_count }}</span><span class="stat-label">Students</span></div>
+  <div class="card stat"><span class="stat-value">{{ users_count }}</span><span class="stat-label">Users</span></div>
+</div>
+<div class="card mt">
+  <div class="card-head">
+    <h2>Recent schools</h2>
+    <a href="{% url 'schools:create' %}" class="btn btn-primary btn-sm">+ Create</a>
+  </div>
+  <table class="table">
+    <thead><tr><th>Name</th><th>School ID</th><th>Tenant</th><th>Status</th></tr></thead>
+    <tbody>
+      {% for s in schools %}
+      <tr>
+        <td><a href="{% url 'schools:detail' s.pk %}">{{ s.name }}</a></td>
+        <td class="mono">{{ s.school_id }}</td>
+        <td class="mono">{{ s.tenant_id }}</td>
+        <td><span class="badge">{{ s.status }}</span></td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="4" class="muted">No schools yet.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

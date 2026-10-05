@@ -1,0 +1,49 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Report Card · {{ student.full_name }}</title>
+  <link rel="stylesheet" href="{% static 'css/app.css' %}">
+  <style>
+    body { background: #f1f5f9; padding: 1.5rem; }
+    .sheet { max-width: 720px; margin: 0 auto; background: #fff; color: #0f172a; border: 1px solid #cbd5e1; border-radius: 8px; padding: 2rem; }
+    @media print { body { background: #fff; padding: 0; } .no-print { display: none; } .sheet { border: none; } }
+  </style>
+</head>
+<body>
+  <div class="no-print" style="max-width:720px;margin:0 auto 1rem;display:flex;justify-content:space-between;">
+    <a href="javascript:history.back()">← Back</a>
+    <button class="btn btn-primary" onclick="window.print()">Print / Save PDF</button>
+  </div>
+  <article class="sheet">
+    <header style="text-align:center;border-bottom:2px solid #0f172a;padding-bottom:1rem;margin-bottom:1.5rem;">
+      <h1 style="margin:0;font-size:1.5rem;">{{ school.name }}</h1>
+      <p class="muted" style="margin:0.25rem 0;">School ID: {{ school.school_id }}</p>
+      <p style="font-weight:600;margin:0.5rem 0 0;">TERMINAL REPORT CARD</p>
+    </header>
+    <p><strong>Name:</strong> {{ student.full_name }} &nbsp; <strong>Adm No:</strong> {{ student.admission_no }}</p>
+    <p><strong>Class:</strong> {% if student.school_class %}{{ student.school_class.name }}{% else %}—{% endif %}</p>
+    <table class="table">
+      <thead><tr><th>Subject</th><th>CA</th><th>Exam</th><th>Total</th><th>Grade</th><th>Remark</th></tr></thead>
+      <tbody>
+        {% for r in results %}
+        <tr>
+          <td>{{ r.subject.name }}</td>
+          <td>{{ r.ca_score|default:"—" }}</td>
+          <td>{{ r.exam_score|default:"—" }}</td>
+          <td>{{ r.total_score|default:"—" }}</td>
+          <td>{{ r.grade|default:"—" }}</td>
+          <td>{{ r.remark|default:"—" }}</td>
+        </tr>
+        {% empty %}<tr><td colspan="6">No published results.</td></tr>{% endfor %}
+      </tbody>
+    </table>
+    <p style="margin-top:1rem;"><strong>Average:</strong> {{ average|default:"—" }}</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin-top:3rem;font-size:0.85rem;">
+      <div style="border-top:1px solid #64748b;padding-top:0.35rem;">Class Teacher</div>
+      <div style="border-top:1px solid #64748b;padding-top:0.35rem;">Principal / Head Teacher</div>
+    </div>
+  </article>
+</body>
+</html>

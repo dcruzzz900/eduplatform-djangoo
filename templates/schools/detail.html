@@ -1,0 +1,15 @@
+{% extends "base/base.html" %}
+{% block page_title %}{{ school.name }}{% endblock %}
+{% block nav %}
+<a href="{% url 'dashboards:super_admin' %}" class="nav-link">Overview</a>
+<a href="{% url 'schools:list' %}" class="nav-link active">Schools</a>
+{% endblock %}
+{% block content %}
+<div class="card">
+  <p><strong>School ID:</strong> <span class="mono">{{ school.school_id }}</span></p>
+  <p><strong>Tenant ID:</strong> <span class="mono">{{ school.tenant_id }}</span></p>
+  <p><strong>Status:</strong> {{ school.status }}</p>
+  <p><strong>Location:</strong> {{ school.city }} {{ school.state }}</p>
+  <p><strong>Contact:</strong> {{ school.phone }} · {{ school.email }}</p>
+</div>
+{% endblock %}

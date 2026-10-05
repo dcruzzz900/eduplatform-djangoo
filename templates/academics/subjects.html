@@ -1,0 +1,28 @@
+{% extends "base/base.html" %}
+{% block page_title %}Subjects{% endblock %}
+{% block nav %}
+<a href="{% url 'dashboards:school_admin' %}" class="nav-link">Overview</a>
+<a href="{% url 'academics:classes' %}" class="nav-link">Classes</a>
+<a href="{% url 'academics:subjects' %}" class="nav-link active">Subjects</a>
+<a href="{% url 'academics:students' %}" class="nav-link">Students</a>
+{% endblock %}
+{% block content %}
+<form method="post" class="card stack">
+  {% csrf_token %}
+  <div class="grid two">
+    <input class="input" name="name" placeholder="Subject name" required>
+    <input class="input" name="code" placeholder="Code">
+  </div>
+  <button class="btn btn-primary" type="submit">Add subject</button>
+</form>
+<div class="card mt">
+  <table class="table">
+    <thead><tr><th>Name</th><th>Code</th></tr></thead>
+    <tbody>
+      {% for s in subjects %}
+      <tr><td>{{ s.name }}</td><td>{{ s.code }}</td></tr>
+      {% empty %}<tr><td colspan="2">No subjects.</td></tr>{% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

@@ -1,0 +1,56 @@
+{% extends "base/base.html" %}
+{% block page_title %}Fees{% endblock %}
+{% block nav %}
+<a href="{% url 'dashboards:school_admin' %}" class="nav-link">Overview</a>
+<a href="{% url 'fees:admin' %}" class="nav-link active">Fees</a>
+{% endblock %}
+{% block content %}
+<div class="grid two">
+  <form method="post" class="card stack">
+    {% csrf_token %}
+    <input type="hidden" name="action" value="add_item">
+    <h2>Add fee item</h2>
+    <input class="input" name="name" placeholder="e.g. Tuition" required>
+    <input class="input" name="amount" type="number" step="100" placeholder="Amount (₦)" required>
+    <button class="btn btn-primary" type="submit">Add</button>
+  </form>
+  <form method="post" class="card stack">
+    {% csrf_token %}
+    <input type="hidden" name="action" value="generate">
+    <h2>Generate invoices</h2>
+    {% for i in items %}
+    <label class="inline"><input type="checkbox" name="fee_items" value="{{ i.id }}"> {{ i.name }} — ₦{{ i.amount }}</label>
+    {% empty %}<p class="muted">Add fee items first.</p>{% endfor %}
+    <button class="btn btn-primary" type="submit">Generate for all active students</button>
+  </form>
+</div>
+<div class="card mt">
+  <h2>Invoices</h2>
+  <table class="table">
+    <thead><tr><th>Ref</th><th>Student</th><th>Total</th><th>Balance</th><th>Status</th><th>Pay</th></tr></thead>
+    <tbody>
+      {% for inv in invoices %}
+      <tr>
+        <td class="mono">{{ inv.reference }}</td>
+        <td>{{ inv.student.full_name }}</td>
+        <td>₦{{ inv.total_amount }}</td>
+        <td>₦{{ inv.balance }}</td>
+        <td>{{ inv.status }}</td>
+        <td>
+          {% if inv.status != 'PAID' and inv.status != 'CANCELLED' %}
+          <form method="post" class="row-form">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="pay">
+            <input type="hidden" name="invoice_id" value="{{ inv.id }}">
+            <input class="input" style="width:5rem" name="amount" type="number" step="100" placeholder="Amt" required>
+            <select class="input" name="method"><option>CASH</option><option>TRANSFER</option><option>POS</option></select>
+            <button class="btn btn-sm" type="submit">Record</button>
+          </form>
+          {% endif %}
+        </td>
+      </tr>
+      {% empty %}<tr><td colspan="6">No invoices.</td></tr>{% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

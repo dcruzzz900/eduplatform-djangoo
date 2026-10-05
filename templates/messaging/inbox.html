@@ -1,0 +1,33 @@
+{% extends "base/base.html" %}
+{% block page_title %}Messages{% endblock %}
+{% block nav %}
+<a href="{% url 'messaging:inbox' %}" class="nav-link active">Messages</a>
+{% endblock %}
+{% block content %}
+<div class="grid two">
+  <form method="post" class="card stack">
+    {% csrf_token %}
+    <h2>Compose</h2>
+    <select class="input" name="recipient_id" required>
+      <option value="">Recipient</option>
+      {% for u in directory %}
+      <option value="{{ u.id }}">{{ u.get_full_name|default:u.username }} ({{ u.role }})</option>
+      {% endfor %}
+    </select>
+    <input class="input" name="subject" placeholder="Subject">
+    <textarea class="input" name="body" rows="4" required placeholder="Message"></textarea>
+    <button class="btn btn-primary" type="submit">Send</button>
+  </form>
+  <div class="card">
+    <h2>Inbox</h2>
+    {% for m in inbox %}
+    <div class="notice-item">
+      <strong>{{ m.sender.get_full_name|default:m.sender.username }}</strong>
+      {% if m.subject %}<div>{{ m.subject }}</div>{% endif %}
+      <p class="small">{{ m.body }}</p>
+      <p class="muted small">{{ m.created_at }}</p>
+    </div>
+    {% empty %}<p class="muted">No messages.</p>{% endfor %}
+  </div>
+</div>
+{% endblock %}

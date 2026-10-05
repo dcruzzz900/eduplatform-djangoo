@@ -1,0 +1,20 @@
+{% extends "base/base.html" %}
+{% block page_title %}Teacher{% endblock %}
+{% block nav %}
+<a href="{% url 'dashboards:teacher' %}" class="nav-link active">Dashboard</a>
+<a href="{% url 'attendance:mark' %}" class="nav-link">Attendance</a>
+<a href="{% url 'results:entry' %}" class="nav-link">Results</a>
+<a href="{% url 'messaging:inbox' %}" class="nav-link">Messages</a>
+{% endblock %}
+{% block content %}
+<div class="btn-row">
+  <a class="btn btn-primary" href="{% url 'attendance:mark' %}">Mark attendance</a>
+  <a class="btn" href="{% url 'results:entry' %}">Enter scores</a>
+</div>
+<div class="card mt">
+  <h2>Notices</h2>
+  {% for n in notices %}
+  <div class="notice-item"><strong>{{ n.title }}</strong><p class="small">{{ n.body|truncatewords:40 }}</p></div>
+  {% empty %}<p class="muted">No notices.</p>{% endfor %}
+</div>
+{% endblock %}

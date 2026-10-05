@@ -1,0 +1,43 @@
+{% extends "base/base.html" %}
+{% block page_title %}Manage Results{% endblock %}
+{% block nav %}
+<a href="{% url 'results:entry' %}" class="nav-link">Entry</a>
+<a href="{% url 'results:manage' %}" class="nav-link active">Manage</a>
+{% endblock %}
+{% block content %}
+<form method="get" class="card row-form">
+  <select class="input" name="class_id">
+    <option value="">Class</option>
+    {% for c in classes %}<option value="{{ c.id }}" {% if class_id == c.id|stringformat:"s" %}selected{% endif %}>{{ c.name }}</option>{% endfor %}
+  </select>
+  <select class="input" name="subject_id">
+    <option value="">Subject</option>
+    {% for s in subjects %}<option value="{{ s.id }}" {% if subject_id == s.id|stringformat:"s" %}selected{% endif %}>{{ s.name }}</option>{% endfor %}
+  </select>
+  <button class="btn" type="submit">Load</button>
+</form>
+{% if results %}
+<form method="post" class="card mt">
+  {% csrf_token %}
+  <input type="hidden" name="class_id" value="{{ class_id }}">
+  <input type="hidden" name="subject_id" value="{{ subject_id }}">
+  <table class="table">
+    <thead><tr><th>Student</th><th>CA</th><th>Exam</th><th>Total</th><th>Grade</th><th>Status</th></tr></thead>
+    <tbody>
+      {% for r in results %}
+      <tr>
+        <td>{{ r.student.full_name }}</td>
+        <td>{{ r.ca_score|default:"—" }}</td>
+        <td>{{ r.exam_score|default:"—" }}</td>
+        <td>{{ r.total_score|default:"—" }}</td>
+        <td>{{ r.grade|default:"—" }}</td>
+        <td>{{ r.status }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <button class="btn btn-primary" name="action" value="approve" type="submit">Approve submitted</button>
+  <button class="btn" name="action" value="publish" type="submit">Publish approved</button>
+</form>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends "base/base.html" %}
+{% block page_title %}My Results{% endblock %}
+{% block nav %}
+<a href="{% url 'dashboards:student' %}" class="nav-link">Dashboard</a>
+<a href="{% url 'results:my' %}" class="nav-link active">Results</a>
+{% endblock %}
+{% block content %}
+{% if student %}<p><a class="btn btn-sm" href="{% url 'results:report_card' student.id %}">Print report card</a></p>{% endif %}
+<div class="card">
+  <table class="table">
+    <thead><tr><th>Subject</th><th>CA</th><th>Exam</th><th>Total</th><th>Grade</th><th>Remark</th></tr></thead>
+    <tbody>
+      {% for r in results %}
+      <tr>
+        <td>{{ r.subject.name }}</td>
+        <td>{{ r.ca_score|default:"—" }}</td>
+        <td>{{ r.exam_score|default:"—" }}</td>
+        <td>{{ r.total_score|default:"—" }}</td>
+        <td>{{ r.grade|default:"—" }}</td>
+        <td>{{ r.remark|default:"—" }}</td>
+      </tr>
+      {% empty %}<tr><td colspan="6">No published results.</td></tr>{% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

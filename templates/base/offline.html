@@ -1,0 +1,22 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#3b82f6">
+  <title>Offline · EduPlatform</title>
+  <link rel="stylesheet" href="{% static 'css/app.css' %}">
+</head>
+<body>
+  <div class="auth-page">
+    <div class="auth-card">
+      <h1>You're offline</h1>
+      <p class="muted">EduPlatform can't reach the server right now. Check your connection and try again.</p>
+      <p class="muted small">Cached pages (dashboard shell, login, styles) may still work when you navigate back.</p>
+      <button class="btn btn-primary btn-block" type="button" onclick="location.reload()">Retry</button>
+      <p class="mt"><a href="/">Go home</a> · <a href="/login/">Sign in</a></p>
+    </div>
+  </div>
+</body>
+</html>

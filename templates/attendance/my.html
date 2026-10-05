@@ -1,0 +1,18 @@
+{% extends "base/base.html" %}
+{% block page_title %}My Attendance{% endblock %}
+{% block nav %}
+<a href="{% url 'dashboards:student' %}" class="nav-link">Dashboard</a>
+<a href="{% url 'attendance:my' %}" class="nav-link active">Attendance</a>
+{% endblock %}
+{% block content %}
+<div class="card">
+  <table class="table">
+    <thead><tr><th>Date</th><th>Status</th><th>Remarks</th></tr></thead>
+    <tbody>
+      {% for r in records %}
+      <tr><td>{{ r.date }}</td><td>{{ r.status }}</td><td>{{ r.remarks|default:"—" }}</td></tr>
+      {% empty %}<tr><td colspan="3">No records.</td></tr>{% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

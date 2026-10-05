@@ -1,0 +1,24 @@
+{% extends "base/base.html" %}
+{% block page_title %}Schools{% endblock %}
+{% block nav %}
+<a href="{% url 'dashboards:super_admin' %}" class="nav-link">Overview</a>
+<a href="{% url 'schools:list' %}" class="nav-link active">Schools</a>
+<a href="{% url 'schools:create' %}" class="nav-link">Create School</a>
+{% endblock %}
+{% block content %}
+<div class="card">
+  <table class="table">
+    <thead><tr><th>Name</th><th>School ID</th><th>Tenant</th><th>Status</th></tr></thead>
+    <tbody>
+      {% for s in schools %}
+      <tr>
+        <td><a href="{% url 'schools:detail' s.pk %}">{{ s.name }}</a></td>
+        <td class="mono">{{ s.school_id }}</td>
+        <td class="mono">{{ s.tenant_id }}</td>
+        <td>{{ s.status }}</td>
+      </tr>
+      {% empty %}<tr><td colspan="4">No schools.</td></tr>{% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

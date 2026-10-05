@@ -1,0 +1,38 @@
+{% extends "base/base.html" %}
+{% block page_title %}Notices{% endblock %}
+{% block nav %}
+<a href="{% url 'dashboards:school_admin' %}" class="nav-link">Overview</a>
+<a href="{% url 'notices:list' %}" class="nav-link active">Notices</a>
+{% endblock %}
+{% block content %}
+<form method="post" class="card stack">
+  {% csrf_token %}
+  <input class="input" name="title" placeholder="Title" required>
+  <textarea class="input" name="body" rows="3" placeholder="Message" required></textarea>
+  <div class="grid two">
+    <select class="input" name="audience">
+      <option value="ALL">Everyone</option>
+      <option value="STAFF">Staff</option>
+      <option value="TEACHERS">Teachers</option>
+      <option value="STUDENTS">Students</option>
+      <option value="PARENTS">Parents</option>
+    </select>
+    <select class="input" name="priority">
+      <option value="NORMAL">Normal</option>
+      <option value="HIGH">High</option>
+      <option value="URGENT">Urgent</option>
+    </select>
+  </div>
+  <button class="btn btn-primary" type="submit">Publish</button>
+</form>
+<div class="card mt">
+  {% for n in notices %}
+  <div class="notice-item">
+    <strong>{{ n.title }}</strong>
+    <span class="badge">{{ n.priority }}</span>
+    <p>{{ n.body }}</p>
+    <p class="muted small">{{ n.audience }} · {{ n.published_at }}</p>
+  </div>
+  {% empty %}<p class="muted">No notices.</p>{% endfor %}
+</div>
+{% endblock %}

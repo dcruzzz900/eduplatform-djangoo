@@ -1,0 +1,59 @@
+{% extends "base/base.html" %}
+{% block page_title %}Mark Attendance{% endblock %}
+{% block nav %}
+<a href="{% url 'dashboards:school_admin' %}" class="nav-link">Overview</a>
+<a href="{% url 'attendance:mark' %}" class="nav-link active">Attendance</a>
+{% endblock %}
+{% block content %}
+<form method="get" class="card row-form">
+  <select class="input" name="class_id" required>
+    <option value="">Class</option>
+    {% for c in classes %}
+    <option value="{{ c.id }}" {% if class_id == c.id|stringformat:"s" %}selected{% endif %}>{{ c.name }}</option>
+    {% endfor %}
+  </select>
+  <input class="input" type="date" name="date" value="{{ date }}">
+  <button class="btn" type="submit">Load</button>
+</form>
+{% if students %}
+<form method="post" class="card mt" id="attendance-form">
+  {% csrf_token %}
+  <input type="hidden" name="class_id" value="{{ class_id }}">
+  <input type="hidden" name="date" value="{{ date }}">
+  <table class="table">
+    <thead><tr><th>Student</th><th>Status</th></tr></thead>
+    <tbody>
+      {% for s in students %}
+      <tr>
+        <td>{{ s.full_name }} <span class="muted mono">{{ s.admission_no }}</span></td>
+        <td>
+          <select class="input" name="status_{{ s.id }}">
+            <option value="PRESENT">Present</option>
+            <option value="ABSENT">Absent</option>
+            <option value="LATE">Late</option>
+            <option value="EXCUSED">Excused</option>
+          </select>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <button class="btn btn-primary" type="submit">Save attendance</button>
+  <button class="btn" type="button" id="save-offline">Save offline</button>
+</form>
+{% endif %}
+{% endblock %}
+{% block extra_js %}
+<script>
+document.getElementById('save-offline')?.addEventListener('click', function () {
+  const form = document.getElementById('attendance-form');
+  if (!form) return;
+  const data = Object.fromEntries(new FormData(form).entries());
+  const key = 'eduplatform_attendance_queue';
+  const q = JSON.parse(localStorage.getItem(key) || '[]');
+  q.push({ ...data, queuedAt: new Date().toISOString() });
+  localStorage.setItem(key, JSON.stringify(q));
+  alert('Saved offline. Will need manual re-submit when online (or sync later).');
+});
+</script>
+{% endblock %}
